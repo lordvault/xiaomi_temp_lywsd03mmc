@@ -37,13 +37,17 @@ else
 	#$(echo mosquitto_pub -h 0.0.0.0 -p 1883 -t homeassistant/xiaomi/temp -m "{Temp=23, Hum=45, date=some}" -r)
 	echo "Data to publish: $data"
 	#/usr/bin/mosquitto_pub -h 0.0.0.0 -V mqttv311 -t "homeassistant/xiaomi/$sensor/temp" -m "$data"
-	if [ ! -z "$finalTemp" ] || [ $finalTemp -lt 100]
+	booleanNum=$(echo "$finalTemp < 100"|bc);
+	echo $booleanNum;
+	if [ ! -z "$finalTemp" ] && [ $booleanNum -eq 1 ]
 	then
 		/usr/bin/mosquitto_pub -h 0.0.0.0 -V mqttv311 -t "bedroom/temp" -m "$data"
 		/usr/bin/mosquitto_pub -h 0.0.0.0 -V mqttv311 -t "bedroom/hum" -m "$data"
+		echo "Data published to mqtt"
 	else
 		echo "Temperature empty"
 	fi
 	echo "EOS"
 
 fi
+exit
