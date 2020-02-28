@@ -47,3 +47,4 @@ else
 	echo "EOS"
 
 fi
+exit
