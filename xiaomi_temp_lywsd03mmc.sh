@@ -1,4 +1,7 @@
 #!/bin/bash
+#echo "Killing the xiaomi alive process"
+#pkill xiaomi
+#sleep 1
 sensor=bedroom
 
 #bt=$(timeout 15 gatttool -b A4:C1:38:63:71:EF --char-write-req --handle='0x0038' --value="0100" --listen)
@@ -8,6 +11,16 @@ echo $NOW
 RET=1
 count=0
 bt=''
+countProcess=$(ps -fea | grep xiaomi | wc -l );
+echo "Amount of running process ... $countProcess";
+if [ "$countProcess" -gt 2 ]
+then 
+	echo "There are another process running"
+	exit;
+fi
+
+
+
 until ([ ${RET} -eq 124 ] && [ ! -z "$bt" ]) || [ "$count" -gt 5 ]; do
 	#data=$(/usr/bin/timeout 30 /usr/bin/gatttool -b $bt --char-write-req --handle=0x10 -n 0100 --listen | grep "Notification handle" -m 2)
 	echo "."
